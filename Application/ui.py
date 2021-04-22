@@ -1,15 +1,18 @@
 from tkinter import *
 from tkinter import scrolledtext, font, ttk
 import glob
-import random
+import numpy as np
+import tensorflow as tf
 
 
 # Button command
 def buttonCommand():
     textInput = reviewInput.get('1.0', 'end-1c')
-    selectedFile = "../Models/" + dropdown.get()
-    print(selectedFile, textInput)
-    starNum = random.randint(1, 5)
+    selectedFile = "..\Models\\" + dropdown.get()
+    model = tf.keras.models.load_model(selectedFile)
+    prediction = model.predict(np.array([textInput]))[0][0]
+    print(selectedFile, " | ", textInput, " | ", prediction)
+    starNum = round(prediction*5) if prediction > 0.05 else 1
     stars.config(text='★' * starNum)
 
 
@@ -48,7 +51,7 @@ title.place(relx=0.5, rely=0.125, width=500, y=-18, x=-250)
 instructions = Label(frame, text='Write a review and we\'ll suggest its rating:', font=instructionsFont, bg='white')
 instructions.place(relx=0.5, rely=0.25, width=500, y=-30, x=-250)
 
-reviewInput = scrolledtext.ScrolledText(frame, undo=True, padx=10, pady=10, bd=3, relief=GROOVE)
+reviewInput = scrolledtext.ScrolledText(frame, undo=True, padx=10, pady=10, bd=3, relief=GROOVE, wrap=WORD)
 reviewInput.configure(font=textFont)
 reviewInput.place(relx=0.25, rely=0.25, relheight=0.5, relwidth=0.5)
 
