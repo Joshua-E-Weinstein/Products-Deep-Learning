@@ -10,6 +10,7 @@ import tensorflow as tf
 global loading
 global animating
 
+
 # Button command
 def buttonCommand():
     global loading
