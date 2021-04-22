@@ -1,19 +1,53 @@
 from tkinter import *
 from tkinter import scrolledtext, font, ttk
 import glob
+import threading
+import time
 import numpy as np
 import tensorflow as tf
 
+# Variables
+global loading
+global animating
 
 # Button command
 def buttonCommand():
+    global loading
+    loading = True
+    threading.Thread(target=loadingAnimation).start()
+    threading.Thread(target=predict).start()
+
+
+def predict():
+    global loading
+    global animating
     textInput = reviewInput.get('1.0', 'end-1c')
     selectedFile = "..\Models\\" + dropdown.get()
     model = tf.keras.models.load_model(selectedFile)
     prediction = model.predict(np.array([textInput]))[0][0]
     print(selectedFile, " | ", textInput, " | ", prediction)
-    starNum = round(prediction*5) if prediction > 0.05 else 1
-    stars.config(text='★' * starNum)
+    starNum = round(prediction * 5) if prediction > 0.05 else 1
+    loading = False
+    while animating:
+        continue
+    stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-200)
+    stars.config(text='★' * starNum, fg='#FFA41D')
+
+
+def loadingAnimation():
+    global loading
+    global animating
+    dots = 0
+    stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-225)
+    while loading:
+        animating = True
+        stars.config(text='{}Loading{}'.format(' ' * dots, '.' * dots), fg='#19AFFF')
+        if dots < 3:
+            dots += 1
+        else:
+            dots = 0
+        animating = False
+        time.sleep(0.4)
 
 
 # Dropdown update
@@ -40,6 +74,7 @@ titleFont = font.Font(family="Lucida Console", size=18, weight='bold')
 instructionsFont = font.Font(family="Lucida Console", size=14)
 textFont = font.Font(family="Calibri", size=12)
 buttonFont = font.Font(family="Lucida Console", size=12)
+starsFont = font.Font(family="Lucida Console", size=30)
 
 # UI Elements
 frame = Frame(root, bd=0, bg='white')
@@ -68,8 +103,8 @@ dropdown.current(0)
 dropdown.bind("<<ComboboxSelected>>", dropdownUpdate)
 dropdown.place(relx=0.7, rely=0, relwidth=0.3, height=25)
 
-stars = Label(frame, text='', font=('bold', 30), fg='#FFA41D', bg='white')
-stars.place(relx=0.5, rely=0.875, width=200, y=-15, x=-100)
+stars = Label(frame, text='', font=starsFont, fg='#FFA41D', bg='white')
+stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-200)
 
 # Run application
 root.mainloop()
