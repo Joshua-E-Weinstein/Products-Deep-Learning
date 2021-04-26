@@ -41,8 +41,8 @@ for review in dataTable:
 
 # Split lists.
 length = len(reviews)
-trainReviews, validationReviews, testReviews = np.split(reviews, [round(length * 0.3), round(length * 0.5)])
-trainRatings, validationRatings, testRatings = np.split(ratings, [round(length * 0.3), round(length * 0.5)])
+trainReviews, validationReviews, testReviews = np.split(tf.convert_to_tensor(tf.constant(reviews)), [round(length*0.3), round(length*0.5)])
+trainRatings, validationRatings, testRatings = np.split(tf.convert_to_tensor(tf.constant(ratings)), [round(length*0.3), round(length*0.5)])
 
 # Convert lists into tensors.
 trainData = tf.data.Dataset.from_tensor_slices((trainReviews, trainRatings))
