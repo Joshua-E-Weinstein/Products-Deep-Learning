@@ -5,6 +5,7 @@ import threading
 import time
 import numpy as np
 import tensorflow as tf
+import tensorflow_text
 
 # Variables
 global loading
@@ -24,25 +25,25 @@ def predict():
     global animating
     textInput = reviewInput.get('1.0', 'end-1c')
     selectedFile = "..\Models\\" + dropdown.get()
-    model = tf.keras.models.load_model(selectedFile)
-    prediction = model.predict(np.array([textInput]))[0][0]
+    model = tf.keras.models.load_model(selectedFile, compile=False)
+    prediction = model.predict(np.array([textInput]))[0]
     print(selectedFile, " | ", textInput, " | ", prediction)
-    starNum = round(prediction * 5) if prediction > 0.05 else 1
+    starNum = np.argmax(prediction) + 1
     loading = False
     while animating:
         continue
     stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-200)
-    stars.config(text='★' * starNum, fg='#FFA41D')
+    stars.config(text='★' * starNum, fg='#FFA41D', font=starsFont)
 
 
 def loadingAnimation():
     global loading
     global animating
     dots = 0
-    stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-225)
+    stars.place(relx=0.5, rely=0.875, width=400, y=-8, x=-225)
     while loading:
         animating = True
-        stars.config(text='{}Loading{}'.format(' ' * dots, '.' * dots), fg='#19AFFF')
+        stars.config(text='{}Loading{}'.format(' ' * dots, '.' * dots), fg='#19AFFF', font=loadingFont)
         if dots < 3:
             dots += 1
         else:
@@ -76,6 +77,7 @@ instructionsFont = font.Font(family="Lucida Console", size=14)
 textFont = font.Font(family="Calibri", size=12)
 buttonFont = font.Font(family="Lucida Console", size=12)
 starsFont = font.Font(family="Lucida Console", size=30)
+loadingFont = font.Font(family="Lucida Console", size=27)
 
 # UI Elements
 frame = Frame(root, bd=0, bg='white')
