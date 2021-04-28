@@ -10,6 +10,7 @@ import tensorflow_text
 # Variables
 global loading
 global animating
+global model
 
 
 # Button command
@@ -23,11 +24,18 @@ def buttonCommand():
 def predict():
     global loading
     global animating
+    global model
+    goButton["state"] = "disabled"
     textInput = reviewInput.get('1.0', 'end-1c')
-    selectedFile = "..\Models\\" + dropdown.get()
-    model = tf.keras.models.load_model(selectedFile, compile=False)
+    textInput = re.sub('[^a-zA-Z]', ' ', textInput)  # Remove punctuations and numbers
+    textInput = re.sub(r"\s+[a-zA-Z]\s+", ' ', textInput)  # Single character removal
+    textInput = re.sub(r'\s+', ' ', textInput)  # Removing multiple spaces
+    try:
+        model
+    except NameError:
+        modelLoad()
     prediction = model.predict(np.array([textInput]))[0]
-    print(selectedFile, " | ", textInput, " | ", prediction)
+    print(dropdown.get(), " | ", textInput, " | ", prediction)
     starNum = np.argmax(prediction) + 1
     loading = False
     while animating:
@@ -50,9 +58,28 @@ def loadingAnimation():
             dots = 0
         animating = False
         time.sleep(0.4)
+    goButton["state"] = "normal"
 
 
-# Dropdown update
+# Dropdown command (activates when an option is chosen)
+def dropdownCommand(*args):
+    threading.Thread(target=modelLoad).start()
+    threading.Thread(target=loadingAnimation).start()
+
+
+# Load model
+def modelLoad():
+    global loading
+    global model
+    goButton["state"] = "disabled"
+    loading = True
+    selectedFile = "..\Models\\" + dropdown.get()
+    model = tf.keras.models.load_model(selectedFile, compile=False)
+    loading = False
+    stars.config(text='')
+
+
+# Dropdown update (loads list of models)
 def dropdownUpdate(*args):
     dirtyOptions = glob.glob('..\Models\*\\')
     if dirtyOptions:
@@ -103,7 +130,7 @@ options = ['']
 dropdown = ttk.Combobox(buttonsFrame, values=options, state="readonly", postcommand=dropdownUpdate)
 dropdownUpdate()
 dropdown.current(0)
-dropdown.bind("<<ComboboxSelected>>", dropdownUpdate)
+dropdown.bind("<<ComboboxSelected>>", dropdownCommand)
 dropdown.place(relx=0.7, rely=0, relwidth=0.3, height=25)
 
 stars = Label(frame, text='', font=starsFont, fg='#FFA41D', bg='white')
