@@ -26,16 +26,16 @@ def predict():
     global animating
     global model
     goButton["state"] = "disabled"
-    textInput = reviewInput.get('1.0', 'end-1c')
-    textInput = re.sub('[^a-zA-Z]', ' ', textInput)  # Remove punctuations and numbers
-    textInput = re.sub(r"\s+[a-zA-Z]\s+", ' ', textInput)  # Single character removal
-    textInput = re.sub(r'\s+', ' ', textInput)  # Removing multiple spaces
+    textInput = titleInput.get() + " " + reviewInput.get('1.0', 'end-1c')
+    textInput = re.sub(r'[^a-zA-Z\d\s:]', '', textInput)  # Remove punctuations
+    textInput = re.sub(r'\s+', ' ', textInput)  # Remove multiple spaces
+    textInput = re.sub(r'[ \t]+$', '', textInput)  # Remove trailing spaces
     try:
         model
     except NameError:
         modelLoad()
     prediction = model.predict(np.array([textInput]))[0]
-    print(dropdown.get(), " | ", textInput, " | ", prediction)
+    print(dropdown.get(), "|", textInput, "|", prediction)
     starNum = np.argmax(prediction) + 1
     loading = False
     while animating:
@@ -111,13 +111,15 @@ frame = Frame(root, bd=0, bg='white')
 frame.place(relx=0, rely=0, relheight=1, relwidth=1)
 
 title = Label(frame, text='Review Rating Suggester', font=titleFont, bg='white')
-title.place(relx=0.5, rely=0.125, width=500, y=-18, x=-250)
+title.place(relx=0.5, rely=0.125, width=500, y=-40, x=-250)
 
 instructions = Label(frame, text='Write a review and we\'ll suggest its rating:', font=instructionsFont, bg='white')
-instructions.place(relx=0.5, rely=0.25, width=500, y=-30, x=-250)
+instructions.place(relx=0.5, rely=0.25, width=500, y=-60, x=-250)
 
-reviewInput = scrolledtext.ScrolledText(frame, undo=True, padx=10, pady=10, bd=3, relief=GROOVE, wrap=WORD)
-reviewInput.configure(font=textFont)
+titleInput = Entry(frame, bd=3, relief=GROOVE, font=textFont)
+titleInput.place(relx=0.25, rely=0.25, height=25, relwidth=0.5, y=-30, width=-16.5)
+
+reviewInput = scrolledtext.ScrolledText(frame, undo=True, pady=10, bd=3, relief=GROOVE, wrap=WORD, font=textFont)
 reviewInput.place(relx=0.25, rely=0.25, relheight=0.5, relwidth=0.5)
 
 buttonsFrame = Frame(root, bd=0, bg='white')
