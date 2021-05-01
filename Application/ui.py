@@ -3,6 +3,7 @@ from tkinter import scrolledtext, font, ttk
 import glob
 import threading
 import time
+import os
 import numpy as np
 import tensorflow as tf
 import tensorflow_text
@@ -91,12 +92,18 @@ def dropdownUpdate(*args):
         dropdown['values'] = ['']
 
 
+# Closes program entirely
+def closeAll():
+    os._exit(0)
+
+
 # Create window
 root = Tk()
 
 root.title('Ratings AI')
 root.geometry('950x600')
 root.minsize(700, 500)
+root.iconbitmap('../icon.ico')
 
 # Fonts
 titleFont = font.Font(family="Lucida Console", size=18, weight='bold')
@@ -137,6 +144,9 @@ dropdown.place(relx=0.7, rely=0, relwidth=0.3, height=25)
 
 stars = Label(frame, text='', font=starsFont, fg='#FFA41D', bg='white')
 stars.place(relx=0.5, rely=0.875, width=400, y=-15, x=-200)
+
+# Closes all threads when window is closed
+root.protocol("WM_DELETE_WINDOW", closeAll)
 
 # Run application
 root.mainloop()
