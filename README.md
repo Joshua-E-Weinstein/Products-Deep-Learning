@@ -2,13 +2,13 @@
 Deep Learning Project w/ TensorFlow
 
 > To get a folder with an EXECUTABLE:  
-https://www.dropbox.com/s/0g5tad0of9ta31r/Executable.zip?dl=0
+https://www.dropbox.com/s/0g5tad0of9ta31r/Executable.zip?dl=0  
 No Python nor libraries needed for executable.
 
-ModelCreation preferably done on google colab with TPU enabled for best runtime.
+ModelCreation preferably done on google colab with TPU enabled for best runtime.  
 -Requires uncommenting TPU code
 
-Otherwise would optimally require an Nvidia graphics card with cudart installed.
+Otherwise would optimally require an Nvidia graphics card with cudart installed.  
 -Requires uncommenting GPU code.
 
 Libraries needed to run without exe:
