@@ -11,12 +11,12 @@ ModelCreation preferably done on google colab with TPU enabled for best runtime.
 Otherwise would optimally require an Nvidia graphics card with cudart installed.  
 -Requires uncommenting GPU code.
 
-Libraries needed to run without exe:
+Libraries needed to run without exe:  
 1. Numpy
 2. Tensorflow Nightly
 4. Tensorflow Text Nightly
 
-Libraries Used in Project:
+Libraries Used in Project:  
 1. Numpy
 2. Tensorflow
 3. Tensorflow Hub
