@@ -5,18 +5,20 @@ Deep Learning Project w/ TensorFlow
 https://www.dropbox.com/s/0g5tad0of9ta31r/Executable.zip?dl=0  
 No Python nor libraries needed for executable.
 
-ModelCreation preferably done on google colab with TPU enabled for best runtime.  
--Requires uncommenting TPU code
-
-Otherwise would optimally require an Nvidia graphics card with cudart installed.  
--Requires uncommenting GPU code.
-
-Libraries needed to run without exe:  
+####Libraries needed to run GUI without exe:  
 1. Numpy
 2. Tensorflow Nightly
 4. Tensorflow Text Nightly
 
-Libraries Used in Project:  
+## For creation of custom models:
+####ModelCreation.py preferably done on google colab with TPU enabled for best runtime.  
+-Requires uncommenting TPU code
+
+####Otherwise ModelCreation.py would optimally require an Nvidia graphics card with cudart installed.  
+-Requires uncommenting GPU code.
+
+
+####Libraries Used in Project:  
 1. Numpy
 2. Tensorflow
 3. Tensorflow Hub
