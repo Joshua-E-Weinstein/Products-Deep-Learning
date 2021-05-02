@@ -22,6 +22,7 @@ def buttonCommand():
     threading.Thread(target=predict).start()
 
 
+# Runs a prediction for the inputted text
 def predict():
     global loading
     global animating
@@ -45,6 +46,7 @@ def predict():
     stars.config(text='★' * starNum, fg='#FFA41D', font=starsFont)
 
 
+# Starts loading animation
 def loadingAnimation():
     global loading
     global animating
