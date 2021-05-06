@@ -98,7 +98,6 @@ for dataTable in dataTables:  # Takes data from each directory.
                 reviews.append(review["summary"] + " " + review.get("reviewText", ""))  # Adds review.
                 rating = int(review["overall"])
 
-                # ratings.append(rating)
                 ratings.append([1 if i == rating - 1 else 0 for i in range(maxRating)])  # Adds rating in one hot encoding for categorical crossentropy.
 
 # Shuffles the data.
