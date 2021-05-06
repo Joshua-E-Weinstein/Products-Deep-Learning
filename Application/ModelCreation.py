@@ -13,8 +13,6 @@ import tensorflow_text as text
 !pip install -q tf-models-official
 from official.nlp import optimization
 
-import keras.backend as K
-
 import re
 
 import math
