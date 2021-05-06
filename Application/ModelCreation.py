@@ -110,7 +110,6 @@ random.shuffle(ratings)
 cleanReviews = list()  # List to store cleaned reviews.
 
 # Cleans all the reviews.
-cleanReviews = []
 sentences = reviews
 for sen in sentences:
     cleanReviews.append(preprocess_text(sen))
